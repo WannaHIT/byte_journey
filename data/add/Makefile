@@ -1,16 +1,16 @@
 CC = /usr/bin/gcc 
 CFLAGS = -g -Wall -Werror -std=c99
 build:
-	$(CC) $(CFLAGS) add.c -o add 
-test: add 
-	./add 1 2
-	./add 2147483648 1
-	./add 4294967295 0
-	./add 4294967495 1
-	./add 2147483647 1
-	./add 2147483647 0
-	./add 2147483648 4294967295
-	./add 2147483648 2147483648
+	$(CC) $(CFLAGS) adder32.c -o adder32
+test: adder32 
+	./adder32 1 2
+	./adder32 2147483648 1
+	./adder32 4294967295 0
+	./adder32 4294967495 1
+	./adder32 2147483647 1
+	./adder32 2147483647 0
+	./adder32 2147483648 4294967295
+	./adder32 2147483648 2147483648
 
 clean:
-	rm -f add 
+	rm -f adder32
