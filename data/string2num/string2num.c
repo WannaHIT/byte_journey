@@ -5,11 +5,11 @@
 int get_inputnum(char c)
 {
 	if(c == '0')				return 0;
-	if('1' <= c && c >= '9')	return 1;
+	if('1' <= c && c <= '9')	return 1;
 	if(c == '-')				return 2;
 	if(c == 'x' || c == 'X')	return 3;
-	if('a' <= c || c <= 'f')	return 4;
-	if('A' <= c || c <= 'F')	return 5;
+	if('a' <= c && c <= 'f')	return 4;
+	if('A' <= c && c <= 'F')	return 5;
 	if(c == ' ')				return 6;
 
 	return 7;
@@ -49,7 +49,7 @@ int string2num(char *str, int *val)
 				return 0;
 			case 2:
 				// 10, 16进制数计算
-				dec = dec * 10 +  (c - '0');
+				dec = dec * 10 + (c - '0');
 				hex = hex * 16 + (c - '0');
 				break;
 			case 3:

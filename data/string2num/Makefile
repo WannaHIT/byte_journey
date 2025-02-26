@@ -23,4 +23,4 @@ test: strnum
 	./strnum "NOT a number"
 
 clean:
-	rm -f strunm 
+	rm -f strnum
