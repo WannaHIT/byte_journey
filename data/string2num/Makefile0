@@ -1,10 +1,7 @@
 CC = /usr/bin/gcc 
 CFLAGS = -g -Wall -Werror -std=c99
-SRC = string2num.c 
-TARGET = strnum
-# build:
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -o $@ $^
+build:
+	$(CC) $(CFLAGS) string2num.c -o strnum 
 
 test: strnum
 	./strnum "1"
@@ -24,6 +21,6 @@ test: strnum
 	./strnum "0x1234abcd"
 	./strnum "0xabcdhello world"
 	./strnum "NOT a number"
-.PHONY: clean 
+
 clean:
-	rm -f $(TARGET)
+	rm -f strnum

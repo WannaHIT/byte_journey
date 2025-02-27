@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include <limits.h>
 /// @brief 将单个字符<c> 转换为DFA的输入（转移表的列号）
 /// @param c 输入字符
 /// @return DFA的输入 (状态转移表的列号)
@@ -11,7 +12,6 @@ int get_inputnum(char c)
 	if('a' <= c && c <= 'f')	return 4;
 	if('A' <= c && c <= 'F')	return 5;
 	if(c == ' ')				return 6;
-
 	return 7;
 }
 
@@ -38,15 +38,21 @@ int string2num(char *str, int *val)
 	while(1)
 	{
 		c = str[i];
+		// if(c == '\0') break; // 字符串结束
+
 		// DFA 状态转移
-		_state = state;
-		state = Transfer[_state][get_inputnum(c)];
+		_state = state; // 保存当前状态
+		// 根据当前状态和输入确定下一个状态
+		state = Transfer[_state][get_inputnum(c)]; // 查表得到新状态
 		// 根据当前状态，判断是否进行数值运算
 		switch(state)
 		{
 			case -1:
 				// 转换失败
 				return 0;
+			case 1:
+				// 首个0
+				break;
 			case 2:
 				// 10, 16进制数计算
 				dec = dec * 10 + (c - '0');
@@ -55,6 +61,8 @@ int string2num(char *str, int *val)
 			case 3:
 				// neg 
 				neg = 1;
+				break;
+			case 4:
 				break;
 			case 5:
 				// 16进制计算
@@ -80,10 +88,12 @@ int string2num(char *str, int *val)
 	return 0;
 }
 
+
 /* ----- 程序入口 - Entry Point ----- */
 int main(int argc, char *argv[])
 {
-	int a = 0, s = string2num(argv[1], &a);
+	int a = 0, s = 0;
+	s = string2num(argv[1], &a);
 	// 打印绿色的成功结果
 	if(s == 1) printf("\e[1;32m[OK]'%s' => %d\e[0m\n", argv[1], a);
 	// 打印红色的失败结果
