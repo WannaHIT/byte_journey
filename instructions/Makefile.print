@@ -2,8 +2,8 @@ CC = ~/riscv/bin/riscv64-unknown-elf-gcc
 CFLAGS = -g -Wall -Werror -std=c99 -march=rv32im -mabi=ilp32 -c -Wno-main -Wno-error=unused-variable
 OBJDUMP = ~/riscv/bin/riscv64-unknown-elf-objdump
 build:
-	$(CC) $(CFLAGS) printfunc.c -o pint.o 
+	$(CC) $(CFLAGS) printfunc.c -o print.o 
 objdump:
-	$(OBJDUMP) -d pint.o 
+	$(OBJDUMP) -d print.o 
 clean:
-	rm -f pint.o 
+	rm -f print.o 

@@ -21,7 +21,8 @@ int Transfer[6][8] = {
 	{  1,  2,  3, -1,  5,  5,  0,  -1 }, // DFA state 0
 	{  2,  2,  6,  4,  6,  6,  6,   6 }, // DFA state 1
 	{  2,  2,  6,  6,  5,  5,  6,   6 }, // DFA state 2
-	{  1,  2, -1, -1, -1, -1, -1,  -1 }, // DFA state 3
+	// {  1,  2, -1, -1, -1, -1, -1,  -1 }, // DFA state 3
+	{  1,  2, -1, -1,  5,  5, -1,  -1 }, // DFA state 3
 	{  5,  5, -1, -1,  5,  5,  6,   6 }, // DFA state 4
 	{  5,  5,  6,  6,  5,  5,  6,   6 }, // DFA state 5
 };
@@ -75,6 +76,7 @@ int string2num(char *str, int *val)
 				// 转换成功， 按照上一个状态确定十进制/十六进制
 				if      (_state == 5) *val = hex;
 				else if (_state == 2) *val = dec;
+				else if (_state == 1) *val = 0;
 				else return 0;
 				// 处理正负号
 				if(neg == 1) *val = (*val) * -1;
