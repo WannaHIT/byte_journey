@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     while(text_start <= pcnt && pcnt < text_start+text_size)
     {
         // 指令数据寄存器IR
-        ir = instruction_fetch(pcnt, mem, va2pa_l, npc);
+        ir = instruction_fetch(pcnt, mem, va2pa_l, &npc);
         // 解析指令数据
         instruction_decode(ir, xreg, &inst);
         // ALU运算结果

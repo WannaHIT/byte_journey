@@ -21,6 +21,6 @@ void dump_registers()
 {
     for(int i=0; i<32; ++i)
     {
-        printf("X[%2d] %016 %"PRIX64" %22 %"PRIu64"\n", i, xreg[i], xreg[i]);
+        printf("X[%2d] %016"PRIX64" %22"PRIu64"\n", i, xreg[i], xreg[i]);
     }
 }
