@@ -18,18 +18,24 @@ static void select_inputs(const instr_t *inst, uint64_t npc,
     int64_t simm = (int64_t)(inst->imm);
     switch (inst->opcode)
     {
-        case 0x33:
+        case 0x33:  // R:       rs1, rs2
             *input1 = inst->rs1_val;
             *input2 = inst->rs2_val;
             break;
-        case 0x03:
-        case 0x13:
-        case 0x23:
-        case 0x67:
+        case 0x03:  // Load:    rs1, imm
+        case 0x13:  // I:       rs1, imm
+        case 0x23:  // S:       rs1, imm
+        case 0x67:  // jalr:    rs1, offset
             *input1 = inst->rs1_val;
             *input2 = *(uint64_t *)(&simm);
             break;
-        case 0x37:
+        case 0x63:  // B:       npc, imm
+        case 0x17:  // U:       npc, imm(auipc)
+        case 0x6f:  // J:       npc, imm
+            // 获取当前正在执行的指令的实际地址
+            *input1 = npc - 4;
+            *input2 = *(uint64_t *)(&simm);
+        case 0x37:  // U:       ---, imm(lui)
             *input1 = 0;
             *input2 = *(uint64_t *)(&simm);
             break;

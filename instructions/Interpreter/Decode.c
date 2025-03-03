@@ -20,26 +20,27 @@ void instruction_decode(const uint64_t ir, const uint64_t *reg, instr_t *inst)
     int32_t signed_ir = *(int32_t *)&ir;
     switch (inst->opcode)
     {
-        case 0x03:
-        case 0x13:
-        case 0x67:
+        case 0x03:  // Load指令 -I
+        case 0x13:  // 立即数算术逻辑运算 -I
+        case 0x67:  // jalr 跳转 -I
             inst->imm =     signed_ir >> 20;
             break;
-        case 0x23:
+        case 0x23:  // Store指令 -S
             inst->imm =     (signed_ir >> 20)   & 0xffffffe0;
             inst->imm |=     (signed_ir >>  7)  & 0x0000001f;
             break;
-        case 0x63:
-            inst->imm =     (signed_ir >> 19)   & 0xffffe000;
-            inst->imm |=     (signed_ir <<  4)  & 0x00000800;
-            inst->imm |=     (signed_ir >>  7)  & 0xffffffe0;;
-            inst->imm |=     (signed_ir >>  7)  & 0x0000001e;
+        case 0x63:  // 条件分支-B
+        // 该立即数在原始指令中是分散存储的
+            inst->imm =     (signed_ir >> 19)   & 0xffffe000; // 12
+            inst->imm |=     (signed_ir <<  4)  & 0x00000800; // 11
+            inst->imm |=     (signed_ir >>  7)  & 0xffffffe0; // [5:10]
+            inst->imm |=     (signed_ir >>  7)  & 0x0000001e; // [4:1]
             break;
-        case 0x37:
-        case 0x17:
+        case 0x37:  // lui -U
+        case 0x17:  // auipc -U
             inst->imm = signed_ir & 0xfffff000;
             break;
-        case 0x6f:
+        case 0x6f:  // jal -J
             inst->imm =     (signed_ir >> 11)   & 0xfff00000;
             inst->imm |=     signed_ir          & 0x000ff000;
             inst->imm |=     (signed_ir >>  9)  & 0x00000800;

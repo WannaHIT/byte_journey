@@ -27,6 +27,8 @@ int load_image(const char *file, uint64_t text_start, uint64_t stack_start)
     uint32_t buf, text_size = 0, s = 0;
     while(1)
     {
+        // 从image文件中读取一个32位无符号整数（4字节），存储到变量buf中，并将实际读取成功的项数赋值给s
+        // 1: 要读取的数据项数量，这里是1个
         s = fread(&buf, sizeof(uint32_t), 1, image);
         if(s == 1)
         {

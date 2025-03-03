@@ -1,0 +1,8 @@
+# 由于 RISC-V 32 位架构中的立即数最多支持 12 位，无法直接加载大数。
+# lui 用于加载 高 20 位，再配合 addi 等指令来构造完整的大数
+fffff537    lui x10, 0xfffff            # 赋值x10 = 0xfffff000
+fff50513    addi x10, x10, 0xfff        # 赋值x10 = 0xffffffff
+00100593    addi x11, x10, 1            # 赋值x11 = 0x1
+00f707b3    add x12, x12, x10           # 计算 x12 = x + y
+00a63633    sltu x12, x12, x10          # 比较x12和x10无符号数
+00c000b3    add x1, x0, x12             # 将比较结果x12写入返回寄存器查看
