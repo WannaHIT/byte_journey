@@ -1,0 +1,10 @@
+CC = ~/riscv/bin/riscv64-unknown-elf-gcc
+CFLAGS = -g -Wall -Werror -std=c99 -march=rv32im -mabi=ilp32 -c -Wno-main -Wno-error=unused-variable
+OBJDUMP = ~/riscv/bin/riscv64-unknown-elf-objdump
+
+build:
+	$(CC) $(CFLAGS) Factorial.c -o fact.o 
+objdump:
+	$(OBJDUMP) -d fact.o 
+clean:
+	rm -f fact.o 

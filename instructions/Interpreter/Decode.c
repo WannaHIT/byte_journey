@@ -1,10 +1,11 @@
 #include<stdint.h>
 #include"Instr.h"
 
+extern void color_print(instr_t *inst);
 /// @brief 译码：将IR寄存器的指令数据翻译为对应的字段
 /// @param ir IR寄存器的数值(指令数据)
 /// @param reg 指向寄存器数组的指针
-/// @param inst 指向译码结果结构体iinstr_t的指针
+/// @param inst 指向译码结果结构体instr_t的指针
 void instruction_decode(const uint64_t ir, const uint64_t *reg, instr_t *inst)
 {
     // 固定字段
@@ -31,11 +32,18 @@ void instruction_decode(const uint64_t ir, const uint64_t *reg, instr_t *inst)
             break;
         case 0x63:  // 条件分支-B
         // 该立即数在原始指令中是分散存储的
-            inst->imm =     (signed_ir >> 19)   & 0xffffe000; // 12
-            inst->imm |=     (signed_ir <<  4)  & 0x00000800; // 11
-            inst->imm |=     (signed_ir >>  7)  & 0xffffffe0; // [5:10]
-            inst->imm |=     (signed_ir >>  7)  & 0x0000001e; // [4:1]
+            // inst->imm =     (signed_ir >> 19)   & 0xfffff000; // 12
+            // inst->imm |=     (signed_ir <<  4)  & 0x00000800; // 11
+            // inst->imm |=     (signed_ir >>  20)  & 0xffffffe0; // [5:10]
+            // inst->imm |=     (signed_ir >>  7)  & 0x0000001e; // [4:1]
+             // 条件分支-B
+            // 该立即数在原始指令中是分散存储的
+            inst->imm = (signed_ir >> 19) & 0xfffff000; // 12 (符号扩展)B型指令中立即数代表偏移量，可正可负
+            inst->imm |= (signed_ir << 4) & 0x00000800; // 11
+            inst->imm |= (signed_ir >> 20) & 0x000007e0; // [10:5]
+            inst->imm |= (signed_ir >> 7) & 0x0000001e; // [4:1]
             break;
+            // break;
         case 0x37:  // lui -U
         case 0x17:  // auipc -U
             inst->imm = signed_ir & 0xfffff000;
@@ -50,4 +58,5 @@ void instruction_decode(const uint64_t ir, const uint64_t *reg, instr_t *inst)
             inst->imm = 0;
             break;
     }
+    color_print(inst);
 }

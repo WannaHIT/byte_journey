@@ -69,15 +69,27 @@ int main(int argc, char *argv[])
     {
         // 指令数据寄存器IR
         ir = instruction_fetch(pcnt, mem, va2pa_l, &npc);
+        printf("PC:                 0x%lx\nIR:                 0x%lx\n", pcnt, ir);
+
         // 解析指令数据
         instruction_decode(ir, xreg, &inst);
+        // color_print函数可以放这里
+        // printf("Decoded:            opcode=0x%x, rd=%x, rs1=%ld, rs2=%ld, imm=0x%x\n", 
+    //    inst.opcode, inst.rd, inst.rs1_val, inst.rs2_val, inst.imm);
+
         // ALU运算结果
         alu = instruction_execute(&inst, npc, &cond);
+        // printf("Execute:            alu=0x%lx\n", alu);
+
         // 更新程序计数器PC
         pcnt = memory_access(&inst, alu, cond, npc, mem, va2pa_l, va2pa_s, &lmd);
         // 写回目标寄存器
         write_back(&inst, xreg, alu, lmd, npc);
+        // printf("After writeback:    x1=0x%lx, x12=0x%lx\n\n", xreg[1], xreg[12]);
+
     }
+    printf("Loop exited. Final PC: 0x%lx, text_size: %d\n", pcnt, text_size);
+    printf("Final values: x1=0x%lx, x12=0x%lx\n", xreg[1], xreg[12]);
     dump_registers();
     return 0;
 }

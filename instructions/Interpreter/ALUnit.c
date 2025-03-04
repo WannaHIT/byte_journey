@@ -36,6 +36,8 @@ uint64_t alu_cal(const instr_t *inst, uint64_t input1, uint64_t input2)
                             return input1 + input2;
                     }
                 case 0x01:  // sll, slli
+                // 只保留input2的低5位（值范围0-31）
+                // 因为在32位架构中，移位操作只需要5位就能表示所有有效的移位量（0-31位）
                     input2 = input2 & 0x1f;
                     return input1 << input2;
                 case 0x02:  // slt, slti
