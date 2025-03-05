@@ -33,9 +33,12 @@ static void select_inputs(const instr_t *inst, uint64_t npc,
         case 0x17:  // U:       npc, imm(auipc)
         case 0x6f:  // J:       npc, imm
             // 获取当前正在执行的指令的实际地址
+            // 当无符号类型和有符号类型进行运算时，有符号类型将被转换为无符号类型，然后进行运算
+            // input1 是无符号类型，无符号类型和有符号类型运算得到无符号类型
             *input1 = npc - 4;
-            *input2 = *(uint64_t *)(&simm);
-            break; ///////////////////BREAK!!!!!!!!!!!!!!!!!
+            *input2 = *(uint64_t *)(&simm); 
+            // *input2 = simm; // 2025   这里也对，位的表示没有变化
+            break; ///////////////////BREAK!!!!!!!!!!!!这里导致*input1 = 0;即PC = 0
         case 0x37:  // U:       ---, imm(lui)
             *input1 = 0;
             *input2 = *(uint64_t *)(&simm);

@@ -17,13 +17,21 @@ uint64_t alu_cal(const instr_t *inst, uint64_t input1, uint64_t input2)
     {
         case 0x03:  // Load         - 加载
         case 0x23:  // Store        - 储存
-        case 0x63:  // Branch       - 条件分支
+        case 0x63:  // Branch       - 条件分支 !!!分支指令的立即数是有符号偏移量，需要正确地进行符号扩展
         case 0x6f:  // jal          - 跳转
         case 0x67:  // jalr
         case 0x37:  // lui
         case 0x17:  // auipc
-            printf("Debug - Branch calculation: PC=%lx, IMM=%lx\n", input1, input2);
-            return input1 + input2;
+            // printf("Debug - Branch calculation: PC=%lx, IMM=%lx\n", input1, input2);
+            // return input1 + input2; // Original
+            // return s1 + s2;  // 用有符号加法，结果会被正确截断到64位 // 2025 但是不对
+            /* 2025 */
+            // 强制通过32位有符号转换确保正确扩展
+            int32_t offset = (int32_t)input2;
+            int64_t target = (int64_t)input1 + (int64_t)offset;
+            
+            printf("Debug - offset=%d, target=%lx\n", offset, target);
+            return target;
         case 0x33:  // R-Type
         case 0x13:  // I-Type
             switch(inst->funct3)
