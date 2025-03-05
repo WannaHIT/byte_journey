@@ -13,10 +13,12 @@ void instruction_decode(const uint64_t ir, const uint64_t *reg, instr_t *inst)
     inst->rd        = (ir >> 7)     & 0x1f;
     inst->funct3    = (ir >> 12)    & 0x7;
     inst->funct7    = (ir >> 25)    & 0x7f;
-
+    //
+    inst->rs1 = (ir >> 15) & 0x1f;
+    inst->rs2 = (ir >> 20) & 0x1f;
     // 读取源寄存器RS1，RS2的数值
-    inst->rs1_val   = reg[(ir >> 15) & 0x1f];
-    inst->rs2_val   = reg[(ir >> 20) & 0x1f];
+    inst->rs1_val   = reg[inst->rs1];
+    inst->rs2_val   = reg[inst->rs2];
     // 译码立即数， 并符号扩展到32位有符号数<int32_t>
     int32_t signed_ir = *(int32_t *)&ir;
     switch (inst->opcode)
