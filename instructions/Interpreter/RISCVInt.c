@@ -79,13 +79,13 @@ int main(int argc, char *argv[])
 
         // ALU运算结果
         alu = instruction_execute(&inst, npc, &cond);
-        // printf("Execute:            alu=0x%lx\n", alu);
+        printf("Execute:            alu=0x%lx\n", alu);
 
-        // 更新程序计数器PC
+        // 更新程序计数器PC  alu对应target
         pcnt = memory_access(&inst, alu, cond, npc, mem, va2pa_l, va2pa_s, &lmd);
         // 写回目标寄存器
         write_back(&inst, xreg, alu, lmd, npc);
-        // printf("After writeback:    x1=0x%lx, x12=0x%lx\n\n", xreg[1], xreg[12]);
+        printf("After writeback:    x1=0x%lx, x12=0x%lx\n\n", xreg[1], xreg[12]);
 
     }
     printf("Loop exited. Final PC: 0x%lx, text_size: %d\n", pcnt, text_size);

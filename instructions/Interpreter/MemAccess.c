@@ -34,5 +34,6 @@ uint64_t memory_access(const instr_t *inst, uint64_t alu_output, int condition,
         default: break;
     }
     // 更新程序计数器PC，选择NPC或ALU的计算结果
+    // alu_output 对应 target 
     return update_pc(inst, npc, alu_output, condition);
 }

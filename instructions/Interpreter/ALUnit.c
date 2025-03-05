@@ -22,6 +22,7 @@ uint64_t alu_cal(const instr_t *inst, uint64_t input1, uint64_t input2)
         case 0x67:  // jalr
         case 0x37:  // lui
         case 0x17:  // auipc
+            printf("Debug - Branch calculation: PC=%lx, IMM=%lx\n", input1, input2);
             return input1 + input2;
         case 0x33:  // R-Type
         case 0x13:  // I-Type

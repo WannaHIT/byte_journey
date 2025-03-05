@@ -19,7 +19,7 @@ void color_print(instr_t *inst)
 			printf("*********************************\n");
 			printf("Instrution Type: ---R-type.\n");
 			printf("inst->funct7: 					0x%" PRIx32 "\n", inst->funct7); // 使用 PRIu32 宏
-			// 我知道了，rs2_val和rs2不一样！！！！！！！！
+			// 我知道了，rs2_val  和  rs2不一样！！！！！！！！
 			// rs2 = inst->rs1_val
 			printf("inst->rs2: 					0x%" PRIx8 "\n", inst->rs2); 
     		printf("inst->rs1 : 	 				0x%" PRIx8 "\n", inst->rs1); // 使用 PRIu64 宏			
@@ -52,10 +52,10 @@ void color_print(instr_t *inst)
 			// [31:20]					[19:15]  [14:12]    [11:7]   	[6:0]
 			printf("*********************************\n");
 			printf("Instrution Type: ---I-type.\n");
-			printf("inst->imm: 						0x%" PRIx32 "\n", inst->imm);
+			printf("inst->imm: 					0x%" PRIx32 "\n", inst->imm);
 			printf("inst->rs1_val : 	 			0x%" PRIx8 "\n", inst->rs1);
 			printf("inst->funct3:					0x%" PRIx32 "\n", inst->funct3); 
-			printf("inst->rd: 						0x%" PRIx32 "\n", inst->rd); 
+			printf("inst->rd: 					0x%" PRIx32 "\n", inst->rd); 
 			printf("inst->opcode: 					0x%" PRIx32 "\n", inst->opcode);
 			
 			for(int i=0;i<32;i++)
@@ -85,7 +85,7 @@ void color_print(instr_t *inst)
 			// 先截取低5位
 			uint32_t lowbit = inst->imm & 0x1f;
 			// 再截取高7位
-			uint32_t highbit = inst->imm & 0xfe0;
+			uint32_t highbit = (inst->imm & 0xfe0) >> 5;
 			for(int i=0;i<32;i++)
 			{
 				if(i >=0 && i <=6)
@@ -107,15 +107,15 @@ void color_print(instr_t *inst)
 			// 31	[30:25]		[24:20] [19:15]  [14:12]    [11:8]7   	[6:0]
 			printf("*********************************\n");
 			printf("Instrution Type: ---B-type.\n");
-			printf("inst->imm: 						0x%" PRIx32 "\n", inst->imm);
-			printf("inst->rs2: 						0x%" PRIx8 "\n", inst->rs2); 
-    		printf("inst->rs1: 	 					0x%" PRIx8 "\n", inst->rs1);
+			printf("inst->imm: 					0x%" PRIx32 "\n", inst->imm);
+			printf("inst->rs2: 					0x%" PRIx8 "\n", inst->rs2); 
+    		printf("inst->rs1: 	 				0x%" PRIx8 "\n", inst->rs1);
 			printf("inst->funct3:					0x%" PRIx32 "\n", inst->funct3);
 			printf("inst->opcode: 					0x%" PRIx32 "\n", inst->opcode);
-			uint32_t i11 = inst->imm & 0x800;
-			uint32_t i1_4 = inst->imm & 0x1e;
-			uint32_t i5_10 = inst->imm & 0x7e0;
-			uint32_t i12 = inst->imm & 0x1000;
+			uint32_t i11 = (inst->imm & 0x800) >> 11;
+			uint32_t i1_4 = (inst->imm & 0x1e) >> 1;
+			uint32_t i5_10 = (inst->imm & 0x7e0) >> 5;
+			uint32_t i12 = (inst->imm & 0x1000) >> 12;
 			for(int i=0;i<32;i++)
 			{
 				if(i >=0 && i <=6)
@@ -145,7 +145,7 @@ void color_print(instr_t *inst)
 			printf("inst->imm: 						0x%" PRIx32 "\n", inst->imm);
 			printf("inst->rd: 						0x%" PRIx32 "\n", inst->rd); 
 			printf("inst->opcode: 					0x%" PRIx32 "\n", inst->opcode);
-			uint32_t imm = inst->imm & 0xfffff000;
+			uint32_t imm = (inst->imm & 0xfffff000) >> 12;
 			for(int i=0;i<32;i++)
 			{
 				if(i >=0 && i <=6)
@@ -153,7 +153,7 @@ void color_print(instr_t *inst)
 				else if(i >=7 && i <=11)
 					arr[i] = (inst->rd >> (i-7)) & 0x1;
 				else
-					arr[i] = (imm >> (i-0)) & 0x1; // 没有位差，所以没有移动
+					arr[i] = (imm >> (i-12)) & 0x1; // 没有位差，所以没有移动
 			}
 			break;
 		case 0x6f: // -J
@@ -164,10 +164,10 @@ void color_print(instr_t *inst)
 			printf("inst->imm: 						0x%" PRIx32 "\n", inst->imm);
 			printf("inst->rd: 						0x%" PRIx32 "\n", inst->rd); 
 			printf("inst->opcode: 					0x%" PRIx32 "\n", inst->opcode);
-			uint32_t i12_19 = inst->imm & 0xff000;
-			i11 = inst->imm & 0x800;
-			uint32_t i1_10 = inst->imm & 0xefe;
-			uint32_t i20 = inst->imm & 0x100000;
+			uint32_t i12_19 = (inst->imm & 0xff000) >> 12;
+			i11 = (inst->imm & 0x800) >> 11;
+			uint32_t i1_10 = (inst->imm & 0xefe) >> 1;
+			uint32_t i20 = (inst->imm & 0x100000) >> 20;
 			for(int i=0;i<32;i++)
 			{
 				if(i >=0 && i <=6)
@@ -189,6 +189,7 @@ void color_print(instr_t *inst)
 	}
 	for(int i=31; i>=0;i --)
 	{
+		// 这里可以根据指令的不同，打印不同的颜色
 		printf("%d", arr[i]);
 		if(i % 4 == 0) printf(" ");
 	}
