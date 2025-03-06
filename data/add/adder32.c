@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdint.h>
 #include<stdlib.h>
+// 通过位操作实现一个简单的加法器
 /// @brief 32位加法器，支持有符号数和无符号数加减法
 /// @param x 加法输入比特串，注意 这不是数值！
 /// @param y 加法输入比特串，注意 这不是数值！
@@ -8,7 +9,6 @@
 /// @param sf 符号位指针。设为加减法结果的最高符号位
 /// @param of 有符号数字溢出指针， 如果溢出，设为1
 /// @return 加减法结果的比特串。注意这不是数值！
-
 uint32_t adder_32(uint32_t x, uint32_t y, uint32_t *cf, uint32_t *sf, uint32_t *of)
 {
 	uint32_t a = 0; // 加法器结果比特串

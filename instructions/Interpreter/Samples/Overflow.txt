@@ -3,4 +3,4 @@ fff50513    addi x10, x10, 0xfff        # 赋值x10 = 0xffffffff
 00100593    addi x11, x10, 1            # 赋值x11 = 0x1
 00f707b3    add x12, x12, x11           # 计算 x12 = x + y
 00a63633    sltu x12, x12, x10          # 比较x12和x10无符号数
-00c000b3    add x1, x0, x12             # 将比较结果x12写入返回寄存器查看
+00c000b3    add x1, x0, x12             # 将比较结果x12写入返回寄存器查看 
