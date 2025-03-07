@@ -27,10 +27,12 @@ void instruction_decode(const uint64_t ir, const uint64_t *reg, instr_t *inst)
         case 0x13:  // 立即数算术逻辑运算 -I
         case 0x67:  // jalr 跳转 -I
             inst->imm =     signed_ir >> 20;
+            inst->type = 'I';
             break;
         case 0x23:  // Store指令 -S
             inst->imm =     (signed_ir >> 20)   & 0xffffffe0;
             inst->imm |=     (signed_ir >>  7)  & 0x0000001f;
+            inst->type = 'S';
             break;
         case 0x63:  // 条件分支-B
         // 该立即数在原始指令中是分散存储的
@@ -44,17 +46,20 @@ void instruction_decode(const uint64_t ir, const uint64_t *reg, instr_t *inst)
             inst->imm |= (signed_ir << 4) & 0x00000800; // 11
             inst->imm |= (signed_ir >> 20) & 0x000007e0; // [10:5]
             inst->imm |= (signed_ir >> 7) & 0x0000001e; // [4:1]
+            inst->type = 'B';
             break;
             // break;
         case 0x37:  // lui -U
         case 0x17:  // auipc -U
             inst->imm = signed_ir & 0xfffff000;
+            inst->type = 'U';
             break;
         case 0x6f:  // jal -J
             inst->imm =     (signed_ir >> 11)   & 0xfff00000;
             inst->imm |=     signed_ir          & 0x000ff000;
             inst->imm |=     (signed_ir >>  9)  & 0x00000800;
             inst->imm |=     (signed_ir >>  20) & 0x000007fe;
+            inst->type = 'J';
             break;
         default:
             inst->imm = 0;

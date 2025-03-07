@@ -39,7 +39,6 @@ int string2num(char *str, int *val)
 	while(1)
 	{
 		c = str[i];
-		// if(c == '\0') break; // 字符串结束
 
 		// DFA 状态转移
 		_state = state; // 保存当前状态
