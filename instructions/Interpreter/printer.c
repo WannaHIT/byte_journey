@@ -6,6 +6,13 @@
 // RV32I指令集,6种格式,对每条译码的指令重新以二进制打印出来和网站对比
 typedef uint64_t(*va2pa_t)(uint64_t);
 
+void print_r(int *arr);
+void print_i(int *arr);
+void print_s(int  *arr);
+void print_b(int *arr);
+void print_u(int  *arr);
+void print_j(int  *arr);
+
 /// @breif 打印彩色的指令二进制翻译
 /// @param inst 指向指令结构体的指针
 void color_print(instr_t *inst)
@@ -16,7 +23,7 @@ void color_print(instr_t *inst)
 	switch(inst->opcode)
 	{
 		case 0x33: // -R
-			printf("*********************************\n");
+			printf("******************^^^^^^^^*******\n");
 			printf("Instrution Type: ---R-type.\n");
 			printf("inst->funct7: 					0x%" PRIx32 "\n", inst->funct7); // 使用 PRIu32 宏
 			// 我知道了，rs2_val  和  rs2不一样！！！！！！！！
@@ -44,13 +51,14 @@ void color_print(instr_t *inst)
 				else if(i >= 25 && i <= 31)
 					arr[i] = (inst->funct7 >> (i-25)) & 0x1;
 			}
+			print_r(arr);
 			break;
 		case 0x03: // -I
 		case 0x67:
 		case 0x13:
 			// imm[11:0]				rs1		funct3		rd			opcode
 			// [31:20]					[19:15]  [14:12]    [11:7]   	[6:0]
-			printf("*********************************\n");
+			printf("******************^^^^^^^^******\n");
 			printf("Instrution Type: ---I-type.\n");
 			printf("inst->imm: 					0x%" PRIx32 "\n", inst->imm);
 			printf("inst->rs1_val : 	 			0x%" PRIx8 "\n", inst->rs1);
@@ -71,11 +79,12 @@ void color_print(instr_t *inst)
 				else 
 					arr[i] = (inst->imm >> (i-20)) & 0x1;
 			}
+			print_i(arr);
 			break;
 		case 0x23: // -S
 			// imm[11:5] 		rs2		rs1		funct3		imm[4:0]	opcode
 			// [31:25]			[24:20] [19:15]  [14:12]	[11:7]		[6:0]
-			printf("*********************************\n");
+			printf("******************^^^^^^^^*******\n");
 			printf("Instrution Type: ---S-type.\n");
 			printf("inst->imm: 						0x%" PRIx32 "\n", inst->imm);
 			printf("inst->rs2_val: 					0x%" PRIx8 "\n", inst->rs2); 
@@ -101,11 +110,12 @@ void color_print(instr_t *inst)
 				else if(i >= 25 && i <= 31)				
 					arr[i] = (highbit  >> (i-25)) & 0x1;				
 			}
+			print_s(arr);
 			break;
 		case 0x63: // -B
 			// i12 imm[10:5]	rs2		rs1		funct3		imm[4:1]i11	opcode
 			// 31	[30:25]		[24:20] [19:15]  [14:12]    [11:8]7   	[6:0]
-			printf("*********************************\n");
+			printf("******************^^^^^^^^*******\n");
 			printf("Instrution Type: ---B-type.\n");
 			printf("inst->imm: 					0x%" PRIx32 "\n", inst->imm);
 			printf("inst->rs2: 					0x%" PRIx8 "\n", inst->rs2); 
@@ -135,12 +145,13 @@ void color_print(instr_t *inst)
 				else 
 					arr[i] = (i12 >> (i-31)) & 0x1;
 			}
+			print_b(arr);
 			break;
 		case 0x37: // -U
 		case 0x17:
 			// imm[31:12]									rd			opcode
 			// [31:12]										[11:7]   	[6:0]
-			printf("*********************************\n");
+			printf("******************^^^^^^^^*******\n");
 			printf("Instrution Type: ---U-type.\n");
 			printf("inst->imm: 						0x%" PRIx32 "\n", inst->imm);
 			printf("inst->rd: 						0x%" PRIx32 "\n", inst->rd); 
@@ -155,11 +166,12 @@ void color_print(instr_t *inst)
 				else
 					arr[i] = (imm >> (i-12)) & 0x1; // 没有位差，所以没有移动
 			}
+			print_u(arr);
 			break;
 		case 0x6f: // -J
 			// i20 imm[10:1]			i11 imm[19:12]		rd			opcode
 			// 31, [30:21]				20, [19:12]			[11:7]   	[6:0]
-			printf("*********************************\n");
+			printf("*****************^^^^^^^^*******\n");
 			printf("Instrution Type: ---J-type.\n");
 			printf("inst->imm: 						0x%" PRIx32 "\n", inst->imm);
 			printf("inst->rd: 						0x%" PRIx32 "\n", inst->rd); 
@@ -183,16 +195,149 @@ void color_print(instr_t *inst)
 				else 
 					arr[i] = i20 & 0x1;
 			}
+			print_j(arr);
 			break;
 		default:
 			break;
 	}
-	for(int i=31; i>=0;i --)
-	{
-		// 这里可以根据指令的不同，打印不同的颜色
-		printf("%d", arr[i]);
-		if(i % 4 == 0) printf(" ");
-	}
+	// 其实这个循环在每个case里面译码完成之后就可以打印了，试试
+	// for(int i=31; i>=0;i --)
+	// {
+	// 	// 这里可以根据指令的不同，打印不同的颜色
+	// 	// opcode rd funct3 rs1 rs2 funct7 若存在，在每条指令中都是位置固定的
 		
+	// 	printf("%d", arr[i]);
+	// 	if(i % 4 == 0) printf(" ");
+	// }
 	printf("\n");
 }
+
+void print_r(int *arr)
+{
+	int i;
+	
+	for(i=31;i>=0;i--)
+	{
+		if(i>=0 && i <=6)
+			printf("\033[1;31m%d\033[0m", arr[i]); // 红色
+		else if (i >= 7 && i <= 11)
+			printf("\033[1;32m%d\033[0m", arr[i]); // 绿色
+		else if(i >= 12 && i <= 14)
+			printf("\033[1;33m%d\033[0m", arr[i]); // 黄色
+		else if(i >= 15 && i <= 19)
+			printf("\033[1;34m%d\033[0m", arr[i]); // 蓝色
+		else if(i >= 20 && i <= 24)
+			printf("\033[1;30m%d\033[0m", arr[i]); // 黑色
+		else if(i >= 25 && i <= 31)
+			printf("\033[1;36m%d\033[0m", arr[i]); // 青绿色
+		if(i % 4 == 0) printf(" ");
+	}
+}
+
+void print_i(int  *arr)
+{
+	int i;
+	for(i=31;i>=0;i--)
+	{
+		if(i >=0 && i <=6)
+			printf("\033[1;31m%d\033[0m", arr[i]); // 红色
+		else if (i >= 7 && i <= 11)
+			printf("\033[1;32m%d\033[0m", arr[i]);
+		else if(i >= 12 && i <= 14)
+			printf("\033[1;33m%d\033[0m", arr[i]); 
+		else if(i >= 15 && i <= 19)
+			printf("\033[1;34m%d\033[0m", arr[i]); 
+		else 
+			printf("\033[1;36m%d\033[0m", arr[i]);
+		if(i % 4 == 0) printf(" ");
+	}
+	
+	
+}
+void print_s(int  *arr)
+{
+	int i;
+	for(i=31;i>=0;i--)
+	{
+		if(i >=0 && i <=6)
+			printf("\033[1;31m%d\033[0m", arr[i]); // 红色
+		else if( i>= 7 && i <=11)									
+			printf("\033[1;32m%d\033[0m", arr[i]);			
+		else if(i >= 12 && i <= 14)
+			printf("\033[1;33m%d\033[0m", arr[i]);
+		else if(i >= 15 && i <= 19)
+			printf("\033[1;34m%d\033[0m", arr[i]); 
+		else if(i >= 20 && i <= 24)
+			printf("\033[1;36m%d\033[0m", arr[i]);
+		else if(i >= 25 && i <= 31)				
+			printf("\033[1;36m%d\033[0m", arr[i]);
+		if(i % 4 == 0) printf(" ");
+	}
+	
+}
+
+void print_b(int  *arr)
+{
+	int i;
+	for(i=31;i>=0;i--)
+	{
+		if(i >=0 && i <=6)
+			printf("\033[1;31m%d\033[0m", arr[i]); // 红色
+		else if(i==7)				
+			printf("\033[1;32m%d\033[0m", arr[i]);			
+		else if(i >= 8 && i <= 11)				
+			printf("\033[1;33m%d\033[0m", arr[i]);				
+		else if(i >= 12 && i <= 14)
+			printf("\033[1;34m%d\033[0m", arr[i]); 
+		else if(i >= 15 && i <= 19)
+			printf("\033[1;36m%d\033[0m", arr[i]);
+		else if(i >= 20 && i <= 24)
+			printf("\033[1;36m%d\033[0m", arr[i]);
+		else if(i >= 25 && i <= 30)
+			printf("\033[1;31m%d\033[0m", arr[i]); // 红色
+		else 
+			printf("\033[1;32m%d\033[0m", arr[i]);
+		if(i % 4 == 0) printf(" ");
+	}
+	
+}
+
+void print_u(int *arr)
+{
+	int i;
+	for(i=31;i>=0;i--)
+	{
+		if(i >=0 && i <=6)
+			printf("\033[1;31m%d\033[0m", arr[i]); // 红色
+		else if(i >=7 && i <=11)
+			printf("\033[1;32m%d\033[0m", arr[i]);
+		else
+			printf("\033[1;34m%d\033[0m", arr[i]); 
+		if(i % 4 == 0) printf(" ");
+	}
+	
+}
+
+void print_j(int *arr)
+{
+	int i;
+	for(i=31;i>=0;i--)
+	{
+		if(i >=0 && i <=6)
+			printf("\033[1;31m%d\033[0m", arr[i]); // 红色
+		else if(i >=7 && i <=11)
+			printf("\033[1;32m%d\033[0m", arr[i]);
+		else if(i >=12 && i <=19)
+			printf("\033[1;33m%d\033[0m", arr[i]);
+		else if(i == 20)
+			printf("\033[1;34m%d\033[0m", arr[i]);
+		else if(i >=21 && i <=30)
+			printf("\033[1;36m%d\033[0m", arr[i]);
+		else 
+			printf("\033[1;36m%d\033[0m", arr[i]); 
+		if(i % 4 == 0) printf(" ");
+	}
+	
+}
+
+
