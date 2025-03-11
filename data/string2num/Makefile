@@ -24,6 +24,7 @@ test: strnum
 	./strnum "0x1234abcd"
 	./strnum "0xabcdhello world"
 	./strnum "NOT a number"
+	./strnum "0a"
 .PHONY: clean 
 clean:
 	rm -f $(TARGET)

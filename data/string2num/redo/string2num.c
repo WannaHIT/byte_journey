@@ -1,6 +1,10 @@
 #include<stdio.h>
 #include<string.h>
+// 优化了状态转移矩阵
 // 遍历一遍就可以判断并读取内容
+/// @brief 状态矩阵的输入
+/// @param c 具体的输入
+/// @return 返回矩阵里的值
 int get_inputnum(char c)
 {
 	if(c == '0')				return 0;
@@ -24,6 +28,10 @@ int transfer[6][8] = {
 	
 
 // 1 Success, else 0
+/// @brief 扫描一遍字符串完成转换计算
+/// @param str 输入的字符串，argv[1]
+/// @param val 相应的计算数值
+/// @return 成功, 返回1,失败，则返回0
 int string2num(char *str, int *val)
 {
 	int hex = 0, dec = 0, state = 0, neg = 0, i = 0, _state = 0;
@@ -66,8 +74,10 @@ int string2num(char *str, int *val)
 		}
 		i+=1;
 	}
+	// 这里其实可以处理特殊情况，比如0x
 	return 0;
 }
+/* ----- Entry Point ----- */
 int main(int argc, char *argv[])
 {
 	int a = 0, s = 0;
