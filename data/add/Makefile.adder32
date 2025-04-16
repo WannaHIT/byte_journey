@@ -1,11 +1,7 @@
-CC = gcc
-CFLAGS = -Wall -Werror -std=c99
-SRC = $(wildcard *.c)
-TARGET = adder32
-
-$(TARGET):$(SRC)
-	$(CC) $(CFALGS) $< -o $@
-
+CC = /usr/bin/gcc 
+CFLAGS = -g -Wall -Werror -std=c99
+build:
+	$(CC) $(CFLAGS) adder32.c -o adder32
 test: adder32 
 	./adder32 1 2
 	./adder32 7 7
@@ -17,6 +13,5 @@ test: adder32
 	./adder32 2147483648 4294967295
 	./adder32 2147483648 2147483648
 
-.PHONY: clean
 clean:
 	rm -f adder32

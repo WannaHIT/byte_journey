@@ -29,6 +29,7 @@ int int32_overflow(int32_t x, int32_t y)
 int main(int argc, char *argv[])
 {
 	// 以16进制读取4个字节，作为内存上存储的字符串
+	// 默认无符号数
 	uint32_t x = strtol(argv[1], NULL, 16);
 	uint32_t y = strtol(argv[2], NULL, 16);
 
