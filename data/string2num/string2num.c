@@ -1,5 +1,4 @@
 #include<stdio.h>
-#include <limits.h>
 /// @brief 将单个字符<c> 转换为DFA的输入（转移表的列号）
 /// @param c 输入字符
 /// @return DFA的输入 (状态转移表的列号)
