@@ -1,0 +1,18 @@
+# Makefile for test
+CC = gcc
+TARGET = test 
+
+SRC = ./test.c 
+
+OBJ = test.o 
+
+CCFLAGS = -c -Wall 
+
+$(TARGET): $(OBJ)
+	$(CC) -o $@ $^
+
+%.o: %.c
+	$(CC) $(CCFLAGS) $< -o $@
+
+clean:
+	rm -f $(OBJ) $(TARGET)

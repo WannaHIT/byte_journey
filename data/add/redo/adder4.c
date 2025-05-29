@@ -5,6 +5,12 @@
 
 uint8_t adder(uint8_t x, uint8_t y, uint8_t *cf, uint8_t *sf, uint8_t *of)
 {
+    // 确保输入只有低 4 位有效
+    // KEY
+    x &= 0x0F;
+    y &= 0x0F;
+
+
     uint8_t a = 0;
     uint8_t ai = 0;
     uint8_t xi = 0;
@@ -13,7 +19,7 @@ uint8_t adder(uint8_t x, uint8_t y, uint8_t *cf, uint8_t *sf, uint8_t *of)
     uint8_t cj = 0;
 
 
-    for(int i=0; i<4; i++)
+    for(int i=0; i< 4; i++)
     {
         ci = cj;
         xi = (x >> i) & 1;
@@ -26,7 +32,8 @@ uint8_t adder(uint8_t x, uint8_t y, uint8_t *cf, uint8_t *sf, uint8_t *of)
     }
 
     *cf = (cj & 1);
-    *sf = (ai & 1);
+    // *sf = (ai & 1);
+    *sf = ((a >> 3) & 1);  // 获取结果的最高位（位 3）
     *of = (ci ^ cj) & 1;
 
     return a;

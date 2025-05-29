@@ -32,6 +32,7 @@ test: strnum
 	./strnum "a"
 	./strnum "-0xa"
 	./strnum "0x"
+	./strnum "5-"
 
 .PHONY: clean 
 clean:

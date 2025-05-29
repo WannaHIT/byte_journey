@@ -1,0 +1,31 @@
+CC = gcc
+CCFLAGS = -g -Wall
+
+SRC = str_to_num.c 
+OBJ = str_to_num.o 
+TARGET = str_to_num
+
+$(TARGET): $(SRC)
+	$(CC) $(CFLAGS) -o $@ $^
+
+test: str_to_num
+	./str_to_num "5 "
+	./str_to_num " 5"
+	./str_to_num " 5 "
+	./str_to_num "a0"
+	./str_to_num "aa"
+	./str_to_num "ff"
+	./str_to_num "0xff"
+	./str_to_num "00"
+	./str_to_num "0a"
+	./str_to_num "-5"
+	./str_to_num "5-"
+	./str_to_num "-a"
+	./str_to_num "a-"
+	./str_to_num "ffhello"
+	./str_to_num "ff hello"
+	./str_to_num "00xa"
+	./str_to_num "0x"
+
+clean:
+	rm -f $(TARGET) $(OBJ)

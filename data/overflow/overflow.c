@@ -2,6 +2,11 @@
 #include<stdlib.h>
 #include<inttypes.h>
 
+// ANSI 颜色代码
+#define GREEN "\033[32m"
+#define RED "\033[31m"
+#define RESET "\033[0m"
+
 /// @brief 检查32位无符号加法是否溢出
 /// @param x 32bits unsigned int 
 /// @param y 32bits unsigned int 
@@ -34,18 +39,20 @@ int main(int argc, char *argv[])
 	uint32_t y = strtol(argv[2], NULL, 16);
 
 	// 将x，y的比特串解释为有符号数
+	// 类型重解释（type punning）技术，使得同一块内存可以被不同类型解释
 	int32_t *xp = (int32_t *)&x;
 	int32_t *yp = (int32_t *)&y;
 
 	// 检查无符号数是否溢出
 	if(uint32_overflow(x, y) == 1)
-		printf("unsigned: %"PRIu32" Overflow\n", x+y);
+		// PRIu32 是一个格式说明符宏, 正确打印 uint32_t 类型的无符号整数值
+		printf(GREEN"unsigned: %"PRIu32" Overflow\n" RESET, x+y);
 	else 
-		printf("unsigned: %"PRIu32" No overflow\n", x+y);
+		printf(RED"unsigned: %"PRIu32" No overflow\n" RESET, x+y);
 	// 检查无符号数是否溢出
 	if(int32_overflow(*xp, *yp) == 1)
-		printf("Signed: %"PRId32" Overflow\n", *xp + *yp);
+		printf(GREEN "Signed: %"PRId32" Overflow\n\n" RESET, *xp + *yp);
 	else 
-		printf("Signed: %"PRId32" No overflow\n", *xp + *yp);
+		printf(GREEN "Signed: %"PRId32" No overflow\n\n" RESET, *xp + *yp);
 	return 0;
 }
